@@ -15,14 +15,17 @@ $filename = $name.".csv";
 //  $date_today = date("Y-m-d");
 //  $date_today_plus=date("Y-m-d",strtotime('+30 days',strtotime(date("Y-m-d"))));
 //  $date_month = date("Y-m-d",strtotime('-1 month',strtotime(date("Y-m-d"))));
-  $query = "  SELECT DISTINCT 
+  $query = "  SELECT 
+                       
                        `glpi_computers`.`name` AS compname,
-                    
+                     `glpi_computers`.`otherserial` AS inventory_num,
                        `glpi_computers`.`serial`,
-                   
+                   `glpi_computers`.`contact` AS alternate_user,
                        `glpi_softwareversions`.`name` AS version,
                      
-                       `glpi_entities`.`completename` AS entity
+                       `glpi_entities`.`completename` AS entity,
+`glpi_computers`.`otherserial` AS inventory_num,
+                      `glpi_computers_softwareversions`.`date_install` AS dateinstall
                   
                 FROM `glpi_computers_softwareversions`
                 INNER JOIN `glpi_softwareversions`
