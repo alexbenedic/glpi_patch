@@ -324,12 +324,13 @@ class Computer_SoftwareVersion extends CommonDBRelation {
                           'compname'          => __('Name'),
                           'entity'            => __('Entity'),
                           'serial'            => __('Serial number'), 
+//                          'serial'            => __('Serial number'), 
                         'softname'            => __('Software'),
                           'otherserial'       => __('Inventory number'),
                           'location,compname' => __('Location'),
                         
                           'groupe,compname'   => __('Group'),
-                          'username,compname' => __('User'),
+                          'contact,compname' => __('User'),
                           'lname'             => _n('License', 'Licenses', Session::getPluralNumber()),
                           'date_install'      => __('Installation date')];
       if ($crit != "softwares_id") {
@@ -415,6 +416,7 @@ class Computer_SoftwareVersion extends CommonDBRelation {
                        `glpi_computers`.`id` AS cID,
                        `glpi_computers`.`serial`,
                        `glpi_computers`.`otherserial`,
+                       `glpi_computers`.`contact`,
                        `glpi_users`.`name` AS username,
                        `glpi_users`.`id` AS userid,
                        `glpi_users`.`realname` AS userrealname,
@@ -578,7 +580,7 @@ class Computer_SoftwareVersion extends CommonDBRelation {
                echo "<td>".$data['location']."</td>";
              
                echo "<td>".$data['groupe']."</td>";
-               echo "<td>".formatUserName($data['userid'], $data['username'], $data['userrealname'],
+               echo "<td>".formatUserName($data['userid'], $data['contact'], $data['userrealname'],
                                           $data['userfirstname'], $linkUser)."</td>";
 
                $lics = Computer_SoftwareLicense::getLicenseForInstallation($data['cID'],
