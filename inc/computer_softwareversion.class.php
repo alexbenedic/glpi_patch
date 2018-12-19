@@ -823,7 +823,7 @@ class Computer_SoftwareVersion extends CommonDBRelation {
          $header_end .= "<th>" .__('Version')."</th><th>" . __('License') . "</th>";
          $header_end .="<th>" . __('Installation date') . "</th>";
          if (Plugin::haveImport()) {
-            $header_end .= "<th>".__('Automatic inventory')."</th>";
+            $header_end .= "<th>".__('Automatics inventory')."</th>";
          }
          $header_end .= "<th>".SoftwareCategory::getTypeName(1)."</th>";
          $header_end .= "<th>".__('Valid license')."</th>";
