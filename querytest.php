@@ -654,6 +654,125 @@ fwrite ($csv_handler,$data);
 fclose ($csv_handler);
 }
 
+//networks
+
+
+$sql5 = "SELECT `glpi_networkequipments`.`name` as network,`glpi_networkequipments`.`serial`, `glpi_networkequipmentmodels`.`name` AS model, `glpi_manufacturers`.`name` AS manufacture
+FROM `glpi_networkequipments`
+                LEFT JOIN `glpi_networkequipmentmodels`
+                           ON (`glpi_networkequipmentmodels`.`id`=`glpi_networkequipments`.`id`)
+        LEFT JOIN `glpi_manufacturers`
+                           ON (`glpi_manufacturers`.`id`=`glpi_networkequipments`.`manufacturers_id`)
+where  `glpi_networkequipments`.`is_deleted` = 0";
+$result = $conn->query($sql5);
+
+if ($result->num_rows > 0) {
+    $network = $result->num_rows;
+//    echo "total Laptop &nbsp;".$network."<br>" ;
+  $data = "";
+while($row = $result->fetch_assoc()) {
+  $data .= $row['network'].";".$row['serial'].";".$row['model'].";".$row['manufacture']."\n";
+}
+$csv_handler = fopen ('network.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+
+} 
+else {
+    $data = "";
+  $csv_handler = fopen ('network.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+}
+
+$sql51 = "SELECT `glpi_networkequipments`.`name` as network,`glpi_networkequipments`.`serial`, `glpi_networkequipmentmodels`.`name` AS model, `glpi_manufacturers`.`name` AS manufacture
+FROM `glpi_networkequipments`
+                LEFT JOIN `glpi_networkequipmentmodels`
+                           ON (`glpi_networkequipmentmodels`.`id`=`glpi_networkequipments`.`id`)
+        LEFT JOIN `glpi_manufacturers`
+                           ON (`glpi_manufacturers`.`id`=`glpi_networkequipments`.`manufacturers_id`)
+where  `glpi_networkequipments`.`is_deleted` = 1";
+$result = $conn->query($sql51);
+
+if ($result->num_rows > 0) {
+    $network_decom = $result->num_rows;
+//    echo "total Laptop &nbsp;".$network."<br>" ;
+  $data = "";
+while($row = $result->fetch_assoc()) {
+    $data .= $row['network'].";".$row['serial'].";".$row['model'].";".$row['manufacture']."\n";
+}
+$csv_handler = fopen ('network_decom.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+
+} 
+else {
+     $data = "";
+    $csv_handler = fopen ('network_decom.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+}
+
+$sql52 = "SELECT `glpi_networkequipments`.`name` as network,`glpi_networkequipments`.`serial`, `glpi_networkequipmentmodels`.`name` AS model, `glpi_manufacturers`.`name` AS manufacture
+FROM `glpi_networkequipments`
+                LEFT JOIN `glpi_networkequipmentmodels`
+                           ON (`glpi_networkequipmentmodels`.`id`=`glpi_networkequipments`.`id`)
+        LEFT JOIN `glpi_manufacturers`
+                           ON (`glpi_manufacturers`.`id`=`glpi_networkequipments`.`manufacturers_id`)
+where  `glpi_networkequipments`.`is_deleted` = 0 and (`glpi_networkequipments`.`date_mod`) <= DATE('".$last30days."');";
+$result = $conn->query($sql52);
+
+if ($result->num_rows > 0) {
+    $network_notupd = $result->num_rows;
+//    echo "total Laptop &nbsp;".$network."<br>" ;
+  $data = "";
+while($row = $result->fetch_assoc()) {
+    
+}
+$csv_handler = fopen ('network_not_update.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+
+} 
+else {
+    $data = "";
+   $csv_handler = fopen ('network_not_update.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+}
+
+$sql53 = "SELECT `glpi_networkequipments`.`name` as network,`glpi_networkequipments`.`serial`, `glpi_networkequipmentmodels`.`name` AS model, `glpi_manufacturers`.`name` AS manufacture
+FROM `glpi_networkequipments`
+                LEFT JOIN `glpi_networkequipmentmodels`
+                           ON (`glpi_networkequipmentmodels`.`id`=`glpi_networkequipments`.`id`)
+        LEFT JOIN `glpi_manufacturers`
+                           ON (`glpi_manufacturers`.`id`=`glpi_networkequipments`.`manufacturers_id`)
+where  `glpi_networkequipments`.`is_deleted` = 0 and   MONTH(`glpi_networks`.`date_mod`) ='".$mnum."'";
+
+
+$result = $conn->query($sql53);
+
+if ($result->num_rows > 0) {
+    $network_decom_month = $result->num_rows;
+//    echo "total Laptop &nbsp;".$network."<br>" ;
+  $data = "";
+while($row = $result->fetch_assoc()) {
+       $data .= $row['network'].";".$row['serial'].";".$row['model'].";".$row['manufacture']."\n";
+}
+$csv_handler = fopen ('network_decom_month.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+
+} 
+else {
+     $data = "";
+    $network_decom_month = '0';
+    $csv_handler = fopen ('network_decom_month.csv','w');
+fwrite ($csv_handler,$data);
+fclose ($csv_handler);
+}
+
+
 
 //all asset'
 
@@ -688,7 +807,7 @@ while($row = $result->fetch_assoc()) {
 }
 $csv_handler = fopen ('allasset.csv','w');
 fwrite ($csv_handler,$data);
-fclose ($csv_handler);
+fclose ($csv_handler); 
 $csv_handler = fopen ('AllActiveITAsset.csv','w');
 fwrite ($csv_handler,$data1);
 fclose ($csv_handler);
@@ -704,7 +823,7 @@ fclose ($csv_handler);
     $time = date("Y-m-d H:i:s");
 
 $sql = "INSERT INTO glpi_active_chart (desktop, laptop, server, printer,network,storage,dateime)
-VALUES ('".$comp."', '".$lappy."', '".$server."','".$printer."','250','332','".$time."')";
+VALUES ('".$comp."', '".$lappy."', '".$server."','".$printer."','".$network."','332','".$time."')";
 
 if ($conn->query($sql) === TRUE) {
 //    echo "Success";
@@ -712,7 +831,7 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 $sql = "INSERT INTO glpi_noupdate_chart (desktop, laptop, server, printer,network,storage,dateime)
-VALUES ('".$comp_notupd."', '".$lappy_notupd."', '".$server_notupd."','".$printer_notupd."','250','332','".$time."')";
+VALUES ('".$comp_notupd."', '".$lappy_notupd."', '".$server_notupd."','".$printer_notupd."','".$network_notupd."','332','".$time."')";
 
 if ($conn->query($sql) === TRUE) {
 //    echo "Success";
@@ -720,7 +839,7 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 $sql = "INSERT INTO glpi_decom_chart (desktop, laptop, server, printer,network,storage,dateime)
-VALUES ('".$comp_decom."', '".$lappy_decom."', '".$server_decom."','".$printer_decom."','250','332','".$time."')";
+VALUES ('".$comp_decom."', '".$lappy_decom."', '".$server_decom."','".$printer_decom."','".$network_decom."','332','".$time."')";
 
 if ($conn->query($sql) === TRUE) {
 //header('Location: newasset.php');
@@ -728,7 +847,7 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 $sql = "INSERT INTO glpi_decom_chart_month (desktop, laptop, server, printer,network,storage,dateime)
-VALUES ('".$comp_decom_month."', '".$lappy_decom_month."', '".$server_decom_month."','".$printer_decom_month."','250','332','".$time."')";
+VALUES ('".$comp_decom_month."', '".$lappy_decom_month."', '".$server_decom_month."','".$printer_decom_month."','".$network_decom_month."','332','".$time."')";
 
 if ($conn->query($sql) === TRUE) {
 header('Location: newasset.php');
